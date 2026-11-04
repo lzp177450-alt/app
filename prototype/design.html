@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>拾礼 · 设计规范</title>
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/app.css">
+<style>
+  body { background: var(--paper); }
+  .doc { max-width: 720px; margin: 0 auto; padding: 64px 32px 96px; }
+  .doc .lead { margin-top: 18px; font-size: 13px; line-height: 2; color: var(--ink-2); max-width: 520px; }
+  .doc h2 { margin: 56px 0 20px; font-family: var(--serif); font-size: 15px; letter-spacing: 2.4px; color: var(--ink-2); font-weight: 400; }
+  .doc h2::after { content: ""; display: block; width: 100%; height: 1px; background: var(--line); margin-top: 12px; }
+  .sw { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1px; background: var(--line-2); border: 1px solid var(--line-2); }
+  .sw div { background: var(--paper); padding: 0; }
+  .sw .chipc { height: 78px; }
+  .sw .meta { padding: 10px 12px 12px; }
+  .sw .nm { font-size: 11px; letter-spacing: .6px; }
+  .sw .hx { margin-top: 4px; font-size: 10px; color: var(--ink-3); font-variant-numeric: tabular-nums; letter-spacing: .4px; }
+  .type-row { display: flex; align-items: baseline; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--line-2); }
+  .type-row .tag { flex: 0 0 92px; font-size: 10px; letter-spacing: 1.4px; color: var(--ink-3); }
+  .demo-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 6px 0 18px; }
+  .demo-row .btn { flex: 0 0 auto; width: 132px; }
+  .doc .note { margin-top: 40px; font-size: 11px; line-height: 2; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="doc">
+  <p class="eyebrow">拾 礼 · 设 计 规 范</p>
+  <h1 class="display" style="font-size:34px">纸感、编辑式、克制</h1>
+  <p class="lead">参照高端百货的商品目录与银行对账单，而不是电商 App。价格要安静，留白要够，结构靠细线和字重区分，不靠投影和色块。</p>
+
+  <h2>色 板</h2>
+  <div class="sw">
+    <div><div class="chipc" style="background:#F6F3EE"></div><div class="meta"><p class="nm">纸 · 底</p><p class="hx">#F6F3EE</p></div></div>
+    <div><div class="chipc" style="background:#FCFAF7"></div><div class="meta"><p class="nm">纸 · 卡片</p><p class="hx">#FCFAF7</p></div></div>
+    <div><div class="chipc" style="background:#1C1B19"></div><div class="meta"><p class="nm">墨</p><p class="hx">#1C1B19</p></div></div>
+    <div><div class="chipc" style="background:#8A2B2B"></div><div class="meta"><p class="nm">绛 · 金额</p><p class="hx">#8A2B2B</p></div></div>
+    <div><div class="chipc" style="background:#A67C3D"></div><div class="meta"><p class="nm">铜 · 会员</p><p class="hx">#A67C3D</p></div></div>
+    <div><div class="chipc" style="background:#6B665E"></div><div class="meta"><p class="nm">次文字</p><p class="hx">#6B665E</p></div></div>
+    <div><div class="chipc" style="background:#E2DCD2"></div><div class="meta"><p class="nm">线</p><p class="hx">#E2DCD2</p></div></div>
+    <div><div class="chipc" style="background:#FBF0DB"></div><div class="meta"><p class="nm">琥珀 · 预览态</p><p class="hx">#FBF0DB</p></div></div>
+  </div>
+
+  <h2>字 阶</h2>
+  <div class="type-row"><span class="tag">DISPLAY 28</span><span class="display" style="font-size:28px">把心意送到该到的地方</span></div>
+  <div class="type-row"><span class="tag">TITLE 21</span><span class="dtitle" style="font-size:21px">秋水 · 双层玻璃杯</span></div>
+  <div class="type-row"><span class="tag">SECTION 16</span><span class="sec-title" style="font-size:16px">本周常选</span></div>
+  <div class="type-row"><span class="tag">BODY 14</span><span style="font-size:14px;line-height:1.75">六件装 · 含手提袋 · 可定制封签</span></div>
+  <div class="type-row"><span class="tag">SMALL 11</span><span style="font-size:11px;color:var(--ink-2)">耐热玻璃 · 320ml</span></div>
+  <div class="type-row"><span class="tag">MICRO 10</span><span class="eyebrow" style="margin:0">本 期 礼 册</span></div>
+  <div class="type-row"><span class="tag">PRICE 22</span><span style="font-size:22px;font-variant-numeric:tabular-nums">¥ 128 <span style="font-size:11px;color:var(--ink-3)">额度 / 件</span></span></div>
+
+  <h2>组 件</h2>
+  <div class="demo-row">
+    <button class="btn btn--solid">主要操作</button>
+    <button class="btn btn--ghost">次要操作</button>
+    <button class="btn btn--muted">禁用</button>
+    <button class="chip is-on">已选</button>
+    <button class="chip">未选</button>
+  </div>
+
+  <div class="demo-row" style="align-items:stretch">
+    <div class="card" style="min-width:170px">
+      <p class="card-label">可 用 额 度</p>
+      <p class="card-value">900<small>元</small></p>
+      <p class="card-note">12 月 31 日到期</p>
+    </div>
+    <div class="card card--accent" style="min-width:170px">
+      <p class="card-label">在 途 项 目</p>
+      <p class="card-value">3<small>个</small></p>
+      <p class="card-note">本月新增 1 个</p>
+    </div>
+  </div>
+
+  <div style="margin-top:8px;border-top:1px solid var(--line)">
+    <div class="pb-row pb-row--main"><span class="k">额度兑换</span><span class="v"><b>¥128</b><span class="unit">额度 / 件</span></span></div>
+    <div class="pb-row"><span class="k">积分兑换</span><span class="v">4,200 分</span></div>
+    <div class="pb-row"><span class="k">零售价</span><span class="v">¥168</span></div>
+  </div>
+
+  <h2>三 条 规 则</h2>
+  <p class="lead" style="margin-top:0">
+    一、价格永远左对齐、等宽数字，主价格之外一律降两号，不用大红字压过商品名。<br>
+    二、不做九宫格、不做悬浮球、不做凸起 Tab；导航靠字号和细线，不靠色块堆叠。<br>
+    三、身份决定价格形态：同一件商品，在员工、采购、个人三种身份下有四种呈现，切换必须整页可感知。
+  </p>
+
+  <p class="note">字号单位为 px，在 393pt 宽度下等同设计稿标注。实际开发按 rpx = px × 2 换算。</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+/* ---------------------------------------------------------------
+   拾礼 · 设计变量
+   方向：纸感 / 编辑式 / 克制
+   --------------------------------------------------------------- */
+:root {
+  /* 纸 */
+  --paper:      #F6F3EE;
+  --paper-2:    #FCFAF7;
+  --paper-3:    #EFEAE1;
+  --paper-4:    #E8E2D7;
+
+  /* 墨 */
+  --ink:        #1C1B19;
+  --ink-2:      #6B665E;
+  --ink-3:      #A29B90;
+
+  /* 线 */
+  --line:       #E2DCD2;
+  --line-2:     #EDE8E0;
+
+  /* 点缀 */
+  --crimson:      #8A2B2B;
+  --crimson-soft: #F2E7E4;
+  --bronze:       #A67C3D;
+  --bronze-soft:  #F1E9DC;
+  --green:        #3F5B4A;
+  --amber:        #8A6520;
+  --amber-soft:   #FBF0DB;
+
+  /* 字 */
+  --serif: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+
+  /* 尺 */
+  --pad: 20px;
+  --r: 4px;
+  --r-sm: 2px;
+
+  /* 动 */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>拾礼 · 小程序原型</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/app.css">
+<style>
+  .screen.has-action { padding-bottom: 88px; }
+  .langbtn { display: flex; align-items: center; height: 24px; padding: 2px; border: 0.5px solid var(--line); border-radius: 12px; background: var(--paper-2); }
+  .langbtn span { display: grid; place-items: center; height: 18px; padding: 0 7px; border-radius: 9px; font-size: 9.5px; letter-spacing: .4px; color: var(--ink-3); }
+  .langbtn span.is-on { background: var(--ink); color: var(--paper); }
+  .actions { display: flex; gap: 10px; padding: 0 var(--pad); }\n  .bigamount { display: flex; align-items: baseline; }\n  .bigamount small { font-size: 18px; }\n  .thumb svg { width: 76%; }\n  .gallery svg { width: 68%; }\n  .thumb svg *, .gallery svg * { vector-effect: non-scaling-stroke; stroke-width: 1.35; }\n  .display { font-weight: 400; letter-spacing: 1.6px; }
+  .bigamount { display: block; }
+  .bigamount span { font-variant-numeric: tabular-nums; }
+  .gallery { aspect-ratio: 1 / 1; }
+  .gallery svg { width: 56%; }
+  .hintbox { margin: 18px var(--pad) 0; padding: 13px 14px; border: 1px solid var(--line); background: var(--paper-2); font-size: 10.5px; line-height: 1.9; color: var(--ink-2); letter-spacing: .3px; border-radius: 2px; }
+  .hero { padding-top: 2px; padding-bottom: 18px; }
+  .display { font-size: 28px; }
+  .sec { margin-top: 26px; }
+  .feature .thumb { aspect-ratio: 4 / 3; }
+  .qwrap { padding: 22px var(--pad) 0; }
+  .flowbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 26px var(--pad) 0; padding: 14px 16px;
+    background: var(--ink); color: var(--paper); border-radius: 2px;
+    font-size: 12px; letter-spacing: .8px;
+  }
+  .flowbar b { font-family: var(--serif); font-size: 16px; font-weight: 500; letter-spacing: 1px; }
+  .flowbar .n { font-variant-numeric: tabular-nums; }
+  .note { padding: 14px var(--pad) 0; font-size: 10.5px; line-height: 1.9; color: var(--ink-3); }
+  .pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 9.5px; letter-spacing: .8px; border: 1px solid var(--line); padding: 3px 6px; color: var(--ink-3); border-radius: 1px; }
+  .thumb[data-t="1"] { background: #EDE7DD; }
+  .thumb[data-t="2"] { background: #E9E2D6; }
+  .thumb[data-t="3"] { background: #E6E8E1; }
+  .thumb[data-t="4"] { background: #EFE5E0; }
+  .thumb[data-t="5"] { background: #E5E6E2; }
+  .thumb[data-t="6"] { background: #ECE3D8; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 10.6 12 4l8 6.6V20H4z"/><path d="M9.6 20v-5.4h4.8V20"/>
+  </symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="4" width="6.4" height="6.4"/><rect x="13.6" y="4" width="6.4" height="6.4"/>
+    <rect x="4" y="13.6" width="6.4" height="6.4"/><rect x="13.6" y="13.6" width="6.4" height="6.4"/>
+  </symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="6.5" width="18" height="12.5" rx="1.5"/><path d="M3 10h18"/><path d="M16 14.4h2.2"/>
+  </symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8.2" r="3.4"/><path d="M5.2 20c0-3.8 3-6 6.8-6s6.8 2.2 6.8 6"/>
+  </symbol>
+  <symbol id="i-case" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="7.5" width="18" height="12.5" rx="1.5"/><path d="M9 7.5V5h6v2.5"/><path d="M3 12.5h18"/>
+  </symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4h7.6L20 12.4 12.4 20 4 11.6z"/><circle cx="8.4" cy="8.4" r="1.1"/>
+  </symbol>
+  <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 3.5 7.5v9L12 21l8.5-4.5v-9z"/><path d="M3.5 7.5 12 12l8.5-4.5"/><path d="M12 12v9"/>
+  </symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2.5" y="7" width="11.5" height="9"/><path d="M14 10h4l3 3v3h-7z"/>
+    <circle cx="6.8" cy="18.2" r="1.8"/><circle cx="17.4" cy="18.2" r="1.8"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8.5"/><path d="m8 12.2 2.8 2.8L16 9.6"/>
+  </symbol>
+  <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8.5"/><path d="m9 9 6 6M15 9l-6 6"/>
+  </symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 3.5h7.5L18 8v12.5H6z"/><path d="M13.5 3.5V8H18"/><path d="M9 12.5h6M9 16h4"/>
+  </symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3.5" y="8.5" width="17" height="11.5"/><path d="M3.5 12.5h17"/><path d="M12 8.5V20"/>
+    <path d="M12 8.5C10.4 4.8 6.5 4 6.5 6.2c0 1.8 3 2.3 5.5 2.3z"/><path d="M12 8.5c1.6-3.7 5.5-4.5 5.5-2.3 0 1.8-3 2.3-5.5 2.3z"/>
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+    <circle cx="10.8" cy="10.8" r="6"/><path d="M15.4 15.4 20 20"/>
+  </symbol>
+  <symbol id="i-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14.5 5 8 12l6.5 7"/>
+  </symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h13"/><path d="m13 7 5 5-5 5"/>
+  </symbol>
+
+  <symbol id="p-cup" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M39 40v56c0 7.7 9.4 14 21 14s21-6.3 21-14V40"/>
+    <ellipse cx="60" cy="40" rx="21" ry="5"/>
+    <path d="M50 50v46c0 3.9 4.5 7 10 7s10-3.1 10-7V50"/>
+  </symbol>
+  <symbol id="p-box" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="34" y="56" width="52" height="50" rx="1"/>
+    <path d="M34 72h52"/><path d="M60 56v50"/>
+    <path d="M60 56c-4-12-20-16-20-6 0 7 12 7 20 6z"/>
+    <path d="M60 56c4-12 20-16 20-6 0 7-12 7-20 6z"/>
+  </symbol>
+  <symbol id="p-tea" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="41" y="50" width="38" height="58" rx="2"/>
+    <rect x="36" y="42" width="48" height="8" rx="1"/>
+    <path d="M50 70h20"/>
+  </symbol>
+  <symbol id="p-diffuser" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 96h32v6a10 10 0 0 1-10 10H54a10 10 0 0 1-10-10z"/>
+    <path d="M52 96V76h16v20"/>
+    <path d="M60 76V52"/>
+    <path d="M60 58 46 36M60 64 74 42M60 70 42 64"/>
+  </symbol>
+  <symbol id="p-thermos" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="46" y="46" width="28" height="64" rx="9"/>
+    <path d="M52 46v-8h16v8"/>
+    <path d="M46 74h28"/>
+  </symbol>
+  <symbol id="p-notebook" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="38" y="48" width="44" height="58" rx="2"/>
+    <path d="M34 58h5M34 96h5"/>
+    <path d="M50 64h20M50 76h20M50 88h12"/>
+  </symbol>
+  <symbol id="p-plate" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="60" cy="76" r="27"/><circle cx="60" cy="76" r="16"/>
+  </symbol>
+  <symbol id="p-candle" viewBox="26 28 68 92" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="43" y="66" width="34" height="46" rx="2"/>
+    <path d="M60 66V53"/>
+    <path d="M60 53c5-6 9-5 9-1 0 4-5 6-9 1z"/>
+  </symbol>
+
+</defs></svg>
+
+<div class="stage">
+
+  <aside class="rail" id="rail">
+    <h4>屏 幕 目 录</h4>
+    <ol id="railList"></ol>
+    <p class="hint">点身份标识可切换身份<br>连点三次打开调试面板</p>
+  </aside>
+
+  <div class="phone" id="phone">
+
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="sig"><i></i><i></i><i></i><span class="batt"></span></span>
+    </div>
+
+    <div class="viewport">
+
+      <div class="previewbar">
+        <span>预览中 · 以「明德银行 · 员工」视角查看</span>
+        <button id="exitPreview">退出</button>
+      </div>
+
+      <!-- ============ 首页 ============ -->
+      <section class="screen is-active" data-screen="home">
+        <header class="topbar">
+          <button class="identity" id="identityBtn">
+            <span id="identityLabel">明德银行 · 员工</span>
+            <span class="caret">▼</span>
+          </button>
+        </header>
+
+        <button class="searchbar" data-search-entry="1" aria-label="搜索">
+          <span class="searchbar-text">搜索商品 · 品牌 · 编号</span>
+          <svg class="searchbar-icon"><use href="#i-search"></use></svg>
+        </button>
+
+        <div class="flip" id="homeFlip">
+            <div class="flip-inner">
+              <div class="flip-face flip-front">
+                <p class="flip-kicker">中秋 · 企业礼赠</p>
+                <div class="flip-art">
+                  <span class="tile tile-1"><svg><use href="#p-box"></use></svg></span>
+                  <span class="tile tile-2"><svg><use href="#p-tea"></use></svg></span>
+                </div>
+                <div class="flip-foot">
+                  <div>
+                    <p class="flip-title">中秋礼盒</p>
+                    <p class="flip-sub">二十四款 · 可定制封签</p>
+                  </div>
+                  <button class="flip-go" data-go="catalog">查看 ›</button>
+                </div>
+              </div>
+
+              <div class="flip-face flip-back">
+                <p class="flip-kicker">员工福利 · 商务往来</p>
+                <div class="flip-art">
+                  <span class="tile tile-1"><svg><use href="#p-notebook"></use></svg></span>
+                  <span class="tile tile-2"><svg><use href="#p-thermos"></use></svg></span>
+                </div>
+                <div class="flip-foot">
+                  <div>
+                    <p class="flip-title">企业定制</p>
+                    <p class="flip-sub">印 logo · 起订 100 份</p>
+                  </div>
+                  <button class="flip-go" data-go="catalog">查看 ›</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flip-dots">
+              <button class="fdot is-on" data-flip="0" aria-label="1"></button>
+              <button class="fdot" data-flip="1" aria-label="2"></button>
+            </div>
+          
+        </div>
+
+        <div class="hero">
+          <p class="eyebrow">本期礼册 · 二〇二六 · 秋</p>
+          <h1 class="display" data-en="Send warmth<br>to the <em>right</em> place">把心意<br>送到<em>该到</em>的地方</h1>
+        </div>
+
+        <div class="hscroll" id="walletCards"></div>
+
+        <div class="sec">
+          <div class="sec-head">
+            <span class="sec-title">您的预算</span>
+            <span class="sec-more" data-go="catalog">全部礼品 ›</span>
+          </div>
+          <div class="chips" id="homeBudget">
+            <button class="chip" data-min="" data-max="">不限</button>
+            <button class="chip" data-min="" data-max="100">100 元内</button>
+            <button class="chip" data-min="100" data-max="300">100 – 300</button>
+            <button class="chip" data-min="300" data-max="600">300 – 600</button>
+            <button class="chip" data-min="600" data-max="">600 以上</button>
+          </div>
+        </div>
+
+
+        <div class="sec">
+          <div class="sec-head">
+            <span class="sec-title">本周常选</span>
+            <span class="sec-more">按销量 ›</span>
+          </div>
+          <div class="grid2" id="homeGrid"></div>
+        </div>
+
+        <p class="note">所有价格已含税。开票资料可在下单页填写，或由对接人统一开具。</p>
+      </section>
+
+      <!-- ============ 分类 ============ -->
+      <section class="screen" data-screen="category">
+        <header class="topbar">
+          <span class="sec-title">礼册总目</span>
+          <button class="iconbtn" data-go="catalog" aria-label="搜索"><svg><use href="#i-search"></use></svg></button>
+        </header>
+
+        <div class="catsplit">
+          <aside class="catrail" id="catRail"></aside>
+          <div class="catpane" id="catPane"></div>
+        </div>
+      </section>
+
+      <!-- ============ 品牌 ============ -->
+      <section class="screen" data-screen="brands">
+        <header class="topbar">
+          <span class="sec-title">品牌</span>
+        </header>
+
+        <div class="searchbar">
+          <input class="searchbar-input" id="brandSearch" type="text" autocomplete="off" placeholder="搜索品牌名称" />
+          <svg class="searchbar-icon"><use href="#i-search"></use></svg>
+        </div>
+
+        <div class="brandwrap">
+          <div class="brandlist" id="brandList"></div>
+          <div class="brand-index" id="brandIndex"></div>
+        </div>
+      </section>
+
+      <!-- ============ 全部礼品 ============ -->
+      <section class="screen" data-screen="catalog">
+        <header class="topbar">
+          <span class="sec-title">全部礼品</span>
+          <span class="sec-more" style="letter-spacing:.6px" id="catalogCount">24 件</span>
+        </header>
+        <div class="searchbar">
+          <input class="searchbar-input" id="catalogSearch" type="text" autocomplete="off" placeholder="商品名称 · 品牌 · 编号" />
+          <svg class="searchbar-icon"><use href="#i-search"></use></svg>
+        </div>
+        <button class="price-tag" id="brandTag" data-brand-clear hidden>
+          <span id="brandTagText">品牌</span>
+          <span class="price-tag-x">×</span>
+        </button>
+
+        <div class="sec sec--tight">
+          <div class="sec-head">
+            <span class="sec-title">您的预算</span>
+          </div>
+          <div class="chips" id="budgetChips">
+            <button class="chip is-on" data-min="" data-max="">不限</button>
+            <button class="chip" data-min="" data-max="100">100 元内</button>
+            <button class="chip" data-min="100" data-max="300">100 – 300</button>
+            <button class="chip" data-min="300" data-max="600">300 – 600</button>
+            <button class="chip" data-min="600" data-max="">600 以上</button>
+          </div>
+
+          <div class="pricerow">
+            <input class="price-input" id="priceMin" type="text" inputmode="numeric" placeholder="最低" autocomplete="off" />
+            <span class="price-sep">至</span>
+            <input class="price-input" id="priceMax" type="text" inputmode="numeric" placeholder="最高" autocomplete="off" />
+            <button class="price-go" data-price-go>搜索</button>
+          </div>
+        </div>
+
+        <div class="sortrow">
+          <button class="sort is-on">最新</button>
+          <button class="sort">销量</button>
+          <button class="sort">价格 ↑</button>
+          <button class="sort">价格 ↓</button>
+          <button class="sort">筛选</button>
+        </div>
+        <div class="grid2" id="catalogGrid"></div>
+        <div class="empty" id="catalogEmpty" hidden>
+          <p class="empty-title">没有找到匹配的商品</p>
+          <p class="empty-note">试试品牌名或商品编号</p>
+        </div>
+        <p class="note">价格为当前身份对应价。切换身份后，同一件商品会显示不同价格形态。</p>
+      </section>
+
+      <!-- ============ 权益 ============ -->
+      <section class="screen" data-screen="wallet">
+        <header class="topbar">
+          <span class="sec-title">权益</span>
+          <button class="iconbtn" data-go="me"><svg><use href="#i-user"></use></svg></button>
+        </header>
+
+        <div class="wallet-employee">
+        <div class="wallet-top">
+          <p class="wallet-label">可 用 福 利 额 度</p>
+          <p class="bigamount">¥900</p>
+          <p class="wallet-note">本月已用 ¥300 · 2026 年 12 月 31 日到期</p>
+          <div class="bar"><i style="width:75%"></i></div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">礼品券</span><span class="sec-more">2 张可用</span></div>
+          <div class="rows">
+            <div class="ticket">
+              <div class="amt">¥300</div>
+              <div class="ti">
+                <p class="tn">中秋礼盒兑换券</p>
+                <p class="td">限「承月」系列 · 12.31 到期</p>
+              </div>
+              <span class="go">去使用 ›</span>
+            </div>
+            <div class="ticket">
+              <div class="amt">¥200</div>
+              <div class="ti">
+                <p class="tn">生日礼券</p>
+                <p class="td">全场通用 · 11.30 到期</p>
+              </div>
+              <span class="go">去使用 ›</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">积分</span><span class="sec-more">明细 ›</span></div>
+          <div class="rows">
+            <div class="row"><span class="k">可用积分</span><span class="v">8,600</span></div>
+            <div class="row"><span class="k">本月获得</span><span class="v">+1,200</span></div>
+            <div class="row"><span class="k">可兑换商品</span><span class="v">12 件</span></div>
+          </div>
+        </div>
+
+        <p class="note">额度仅限本人使用，不可转让、不可提现。离职后余额于次月清零。</p>
+      </div>        <div class="wallet-personal">
+          <div class="wallet-top">
+            <p class="wallet-label">企 业 权 益</p>
+            <p class="bigamount" style="font-size:26px;letter-spacing:1px;color:var(--ink-2)">未绑定</p>
+            <p class="wallet-note">绑定企业后，可使用福利额度、礼品券与积分</p>
+            <div class="bar"><i style="width:0"></i></div>
+          </div>
+          <button class="btn btn--solid" style="width:calc(100% - 40px);margin:26px 20px 0" data-auth="phone">授权手机号，自动识别</button>
+          <button class="auth-alt" data-auth="code">使用邀请码</button>
+          <p class="note">已经是员工？授权手机号即可自动识别，无需找 HR 要码。</p>
+        </div>
+      </section>
+
+      <!-- ============ 商品详情 ============ -->
+      <section class="screen has-action" data-screen="product">
+                <div class="gallery" id="gallery">
+          <button class="back" data-back aria-label="返回"><svg style="width:16px;height:16px;color:var(--ink)"><use href="#i-left"></use></svg></button>
+          <div class="gallery-track" id="galleryTrack">
+            <div class="slide slide--main"><svg class="glyph"><use href="#p-cup"></use></svg></div>
+            <div class="slide slide--zoom"><svg class="glyph"><use href="#p-cup"></use></svg></div>
+            <div class="slide slide--dims">
+              <div class="dim-wrap">
+                <svg class="glyph"><use href="#p-cup"></use></svg>
+                <span class="dim-h">高 <em id="dimH">11.2cm</em></span>
+                <span class="dim-w"><i></i><em id="dimW">8.4cm</em><i></i></span>
+              </div>
+            </div>
+            <div class="slide slide--scene">
+              <span class="scene-halo"></span>
+              <svg class="glyph"><use href="#p-cup"></use></svg>
+            </div>
+          </div>
+          <div class="dots" id="galleryDots"></div>
+        </div>
+
+        <div class="dhead">
+          <h2 class="dtitle" id="pName">秋水 · 双层玻璃杯</h2>
+          <p class="dsub" id="pSub">耐热玻璃 · 320ml</p>
+          <div class="dcode">
+            <span>编号 <span id="pCode">G-10293</span></span>
+            <button data-copy>复制</button>
+          </div>
+        </div>
+
+        <div class="priceblock" id="priceBlock"></div>
+        <div class="facts" id="pFacts"></div>
+        <div class="specs" id="pSpecs"></div>
+
+        <p class="note">划线价为厂商建议零售价，非本平台历史成交价。价格以提交订单时为准。</p>
+      </section>
+
+      <!-- ============ 兑换确认 ============ -->
+      <section class="screen has-action" data-screen="redeem">
+        <header class="topbar">
+          <button class="iconbtn" data-back><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">兑换确认</span>
+          <span style="width:22px"></span>
+        </header>
+
+        <div class="rows" style="padding-top:6px">
+          <div class="row" style="align-items:flex-start">
+            <span class="k">收货方式</span>
+            <span class="v">快递到家 · 免运费</span>
+          </div>
+        </div>
+
+        <div class="sec" style="margin-top:8px">
+          <div class="sec-head"><span class="sec-title">收件人</span><span class="sec-more">修改 ›</span></div>
+          <div class="rows">
+            <div class="row"><span class="k">林知远　138****6021</span><span class="v">默认</span></div>
+            <div class="row"><span class="k" style="font-size:11.5px;line-height:1.8">杭州市西湖区文三路 90 号<br>明德大厦 12F</span></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">商品</span><span class="sec-more">1 件</span></div>
+          <div class="rows">
+            <div class="row">
+              <span class="k" style="font-family:var(--serif);font-size:13px">秋水 · 双层玻璃杯 × 1</span>
+              <span class="v money">¥128 额度</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">抵扣</span></div>
+          <div class="rows">
+            <div class="row"><span class="k">福利额度</span><span class="v money">− ¥128</span></div>
+            <div class="row"><span class="k">运费</span><span class="v">¥0</span></div>
+            <div class="row"><span class="k">应付</span><span class="v"><b style="font-size:17px">¥0</b></span></div>
+          </div>
+        </div>
+
+        <p class="note">兑换后额度不可退回。如需开具发票，请在下单前联系对接人。</p>
+      </section>
+
+      <!-- ============ 订单 ============ -->
+      <!-- ============ 工作台 ============ -->
+      <section class="screen" data-screen="workbench">
+        <header class="topbar">
+          <button class="identity" id="identityBtnB">
+            <span>明德银行 · 采购</span>
+            <span class="caret">▼</span>
+          </button>
+          <div class="acts">
+            <button class="iconbtn" data-scene="preview" aria-label="预览">
+              <svg><use href="#i-doc"></use></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="wb-hero">
+          <h1 class="wb-title" data-en="Three projects<br>in flight">十月 · 在途<br>三个项目</h1>
+          <p class="wb-sub">明德银行 · 采购端　协议价已生效</p>
+        </div>
+
+        <div class="sec" style="margin-top:22px">
+          <div class="projcard" data-go="project">
+            <p class="pt">2026 中秋员工礼</p>
+            <p class="ps">预算 ¥600,000 · 交付 10 月 30 日</p>
+            <div class="pbar"><i style="width:62%"></i></div>
+            <div class="pfoot"><span>已使用 ¥372,000</span><span>62%</span></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="kpi">
+            <div><p class="n">4</p><p class="l">在途项目</p></div>
+            <div><p class="n">¥37.2万</p><p class="l">本月采购</p></div>
+            <div><p class="n">2</p><p class="l">待开票</p></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">待办</span><span class="sec-more">3 项</span></div>
+          <div class="rows">
+            <div class="todo">
+              <span class="dot"></span>
+              <div><p class="tt">中秋礼盒报价待确认</p><p class="td">供应商已提交 · 剩余 2 天</p></div>
+            </div>
+            <div class="todo">
+              <span class="dot"></span>
+              <div><p class="tt">¥128,400 待开票</p><p class="td">9 月批次 · 需补开票资料</p></div>
+            </div>
+            <div class="todo">
+              <span class="dot" style="background:var(--ink-3)"></span>
+              <div><p class="tt">10 月 30 日到货提醒</p><p class="td">2026 中秋员工礼 · 320 份</p></div>
+            </div>
+          </div>
+        </div>
+<div class="sec">
+          <div class="sec-head"><span class="sec-title">全部项目</span><span class="sec-more">共 6 个 ›</span></div>
+          <div class="rows">
+            <div class="row"><span class="k">2026 春节年货礼</span><span class="v" style="color:var(--ink-3)">筹备中</span></div>
+            <div class="row"><span class="k">Q3 客户答谢礼</span><span class="v" style="color:var(--ink-3)">已完成</span></div>
+            <div class="row"><span class="k">信用卡开卡礼 · 常备</span><span class="v" style="color:var(--ink-3)">长期</span></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ============ 选品 ============ -->
+      <section class="screen" data-screen="sourcing">
+        <header class="topbar">
+          <span class="sec-title">选品 · 组方案</span>
+          <span class="sec-more" style="letter-spacing:.6px">中秋员工礼</span>
+        </header>
+
+        <div class="chips" id="sourcingChips">
+          <button class="chip is-on">不限</button>
+          <button class="chip">100 元内</button>
+          <button class="chip">100 – 300</button>
+          <button class="chip">300 – 600</button>
+          <button class="chip">600 以上</button>
+        </div>
+
+        <div class="sec" style="margin-top:20px">
+          <div class="grid2" id="sourcingGrid"></div>
+        </div>
+
+        <div class="flowbar">
+          <span>已选 <b class="n" id="planCount">3</b> 件</span>
+          <span>去报价 <svg style="width:15px;height:15px;display:inline-block;vertical-align:-2px"><use href="#i-arrow"></use></svg></span>
+        </div>
+
+        <p class="note">加入方案的商品会带着协议价进入报价单，可单独改价、加备注。</p>
+      </section>
+
+      <!-- ============ 报价单 ============ -->
+      <section class="screen" data-screen="quote">
+        <header class="topbar">
+          <button class="iconbtn" data-go="sourcing"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">报价单</span>
+          <button class="iconbtn" data-scene="toast" data-msg="已生成分享图片"><svg><use href="#i-doc"></use></svg></button>
+        </header>
+
+        <div class="qhead">
+          <p class="qno">Q-20261026-01</p>
+          <h2 class="qtitle">2026 中秋员工礼</h2>
+          <p class="qmeta">明德银行 · 320 份 · 交付 10 月 30 日</p>
+        </div>
+
+        <div class="qwrap">
+          <table class="qtable">
+            <thead>
+              <tr><th>商品</th><th class="r">协议价</th><th class="r">数量</th><th class="r">小计</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="name">秋水 · 双层玻璃杯</td><td class="r">98</td><td class="r">60</td><td class="r">5,880</td></tr>
+              <tr><td class="name">承月 · 中秋礼盒</td><td class="r">236</td><td class="r">40</td><td class="r">9,440</td></tr>
+              <tr><td class="name">长白 · 钛保温杯</td><td class="r">268</td><td class="r">20</td><td class="r">5,360</td></tr>
+            </tbody>
+          </table>
+
+          <div class="qtot"><span class="k">合 计</span><span class="v money">¥20,680</span></div>
+          <div class="qtot" style="border-bottom:0"><span class="k">建 议 零 售</span><span class="v">¥35,160</span></div>
+          <div class="qtot" style="border-bottom:0;padding-top:0"><span class="k">预 估 毛 利</span><span class="v" style="font-size:16px">¥14,480 · 41.2%</span></div>
+        </div>
+
+        <div class="actions" style="margin-top:18px;border-top:0">
+          <button class="btn btn--ghost" data-scene="toast" data-msg="可逐项改价">改价</button>
+          <button class="btn btn--solid" data-scene="toast" data-msg="已提交审批">提交审批</button>
+        </div>
+
+        <div class="hintbox">客户打开分享链接，只看到「建议零售价」，看不到协议价与毛利。</div>
+      </section>
+
+      <!-- ============ 项目 ============ -->
+      <section class="screen" data-screen="project">
+        <header class="topbar">
+          <button class="iconbtn" data-go="workbench"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">项目详情</span>
+          <span style="width:22px"></span>
+        </header>
+
+        <div class="qhead">
+          <p class="qno">P-2026-0318</p>
+          <h2 class="qtitle">2026 中秋员工礼</h2>
+          <p class="qmeta">明德银行 · 320 份 · 预算 ¥600,000</p>
+        </div>
+
+        <div class="wt" style="margin-top:20px">
+          <div class="kpi" style="padding:0">
+            <div><p class="n">62%</p><p class="l">预算已用</p></div>
+            <div><p class="n">320</p><p class="l">份数</p></div>
+            <div><p class="n">10.30</p><p class="l">交付日</p></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">节点</span><span class="sec-more">已完成 4 / 6</span></div>
+          <div class="tl">
+            <div class="tl-item done"><p class="td">09 / 02</p><p class="tt">需求确认</p><p class="tn">320 份 · 人均 200 元档</p></div>
+            <div class="tl-item done"><p class="td">09 / 08</p><p class="tt">方案报价</p><p class="tn">三选一，客户选定 A 方案</p></div>
+            <div class="tl-item done"><p class="td">09 / 15</p><p class="tt">审批通过</p><p class="tn">合同编号 MD-2026-0915</p></div>
+            <div class="tl-item done"><p class="td">09 / 28</p><p class="tt">生产完成</p><p class="tn">封签定制 · 已全部入库</p></div>
+            <div class="tl-item now"><p class="td">10 / 30</p><p class="tt">配送交付</p><p class="tn">分 4 个地址发出 · 顺丰</p></div>
+            <div class="tl-item"><p class="td">11 / 05</p><p class="tt">开票结算</p><p class="tn">增值税专用发票 · 6%</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 我的 ============ -->
+      <section class="screen" data-screen="me">
+        <header class="topbar">
+          <span class="sec-title">我的</span>
+          <button class="langbtn" id="langBtn" aria-label="Language"><span data-lang="zh" class="is-on">中</span><span data-lang="en">EN</span></button>
+        </header>
+
+        <div class="me-head" data-sheet="1">
+          <div class="avatar" id="meAvatar">林</div>
+          <div class="me-id">
+            <p class="me-name" id="meName">林知远</p>
+            <p class="me-sub" id="meSub">明德银行 · 员工 · 已绑定</p>
+          </div>
+          <span class="chev">›</span>
+        </div>
+
+        <div class="rows" id="meRows"></div>
+
+        <p class="note">本原型仅用于方案演示，数据均为示意。</p>
+      </section>
+
+      <!-- ============ 清单 ============ -->
+      <section class="screen" data-screen="list">
+        <header class="topbar">
+          <button class="iconbtn" data-back aria-label="返回"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">清单</span>
+          <span style="width:22px"></span>
+        </header>
+        <div class="list-items" id="listItems"></div>
+        <div class="list-total">
+          <span class="buy-k">合计</span>
+          <span class="buy-sum" id="listSum">¥0</span>
+        </div>
+        <div class="list-cta"><button class="btn btn--solid" id="listCheckout" style="width:100%">提交选品单</button></div>
+      </section>
+
+      <!-- ============ 收货地址 ============ -->
+      <section class="screen" data-screen="address">
+        <header class="topbar">
+          <button class="iconbtn" data-back aria-label="返回"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">收货地址</span>
+          <span style="width:22px"></span>
+        </header>
+        <div class="addr-list" id="addressList"></div>
+        <div class="addr-add"><button class="btn btn--ghost" data-scene="toast" data-msg="新增地址（演示）" style="width:100%">+ 新增地址</button></div>
+      </section>
+
+      <!-- ============ 发票抬头 ============ -->
+      <section class="screen" data-screen="invoice">
+        <header class="topbar">
+          <button class="iconbtn" data-back aria-label="返回"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">发票抬头</span>
+          <span style="width:22px"></span>
+        </header>
+        <div class="seg" id="invType">
+          <button class="seg-btn is-on" data-inv-type="company">企业</button>
+          <button class="seg-btn" data-inv-type="personal">个人</button>
+        </div>
+        <div class="form" id="invForm"></div>
+      </section>
+
+      <!-- ============ 账号与安全 ============ -->
+      <section class="screen" data-screen="account">
+        <header class="topbar">
+          <button class="iconbtn" data-back aria-label="返回"><svg><use href="#i-left"></use></svg></button>
+          <span class="sec-title">账号与安全</span>
+          <span style="width:22px"></span>
+        </header>
+        <div class="rows" style="margin-top:6px">
+          <div class="row"><span class="k">手机号</span><span class="v" id="accPhone">138****6021</span></div>
+          <div class="row"><span class="k">微信</span><span class="v">已绑定</span></div>
+          <div class="row" data-scene="toast" data-msg="在「我的」右上角切换语言"><span class="k">语言</span><span class="v" style="color:var(--ink-3)">简体中文 ›</span></div>
+        </div>
+        <div class="rows" style="margin-top:20px">
+          <div class="row" data-scene="toast" data-msg="已提交注销申请（演示）"><span class="k" style="color:var(--crimson)">注销账号</span></div>
+        </div>
+      </section>
+
+      <!-- ============ 信息半屏 ============ -->
+      <div class="mask" id="infoMask"></div>
+      <div class="sheet" id="infoSheet">
+        <p class="sheet-title" id="infoTitle">对接人</p>
+        <div id="infoBody"></div>
+      </div>
+
+      <div class="actionbar" id="actionbar"></div>
+    </div>
+
+    <nav class="tabbar" id="tabbar"></nav>
+
+    <div class="mask" id="mask"></div>
+
+    <div class="sheet" id="sheet">
+      <p class="sheet-title">切 换 身 份</p>
+      <div id="sheetList"></div>
+      <div class="sheet-foot">
+        <span>以客户视角预览</span>
+        <button class="btn btn--muted" id="previewBtn" style="flex:0 0 auto;height:32px;padding:0 16px;font-size:11px">开启</button>
+      </div>
+    </div>
+
+    <div class="mask" id="authMask"></div>
+
+    <div class="sheet" id="authSheet">
+      <p class="sheet-title">企 业 身 份</p>
+
+      <div class="auth-view" data-view="phone">
+        <p class="auth-lead">用于识别你所属的企业与福利额度，仅用于发放、开票与售后。</p>
+        <div class="auth-org">
+          <span class="auth-org-name">明德银行</span>
+          <span class="auth-org-note">已接入 · 员工福利</span>
+        </div>
+        <button class="btn btn--solid" style="width:100%;margin-top:22px" data-auth="grant">微信一键授权</button>
+        <button class="auth-alt" data-auth="code">使用企业邀请码</button>
+        <p class="auth-foot">不同意也可继续浏览，按零售价购买。</p>
+      </div>
+
+      <div class="auth-view" data-view="code" hidden>
+        <p class="auth-lead">输入企业提供的邀请码，绑定后额度自动到账。</p>
+        <input class="auth-input" placeholder="MD-2026-0915" />
+        <button class="btn btn--solid" style="width:100%;margin-top:20px" data-auth="bindcode">绑定</button>
+        <button class="auth-alt" data-auth="phone">返回手机号授权</button>
+      </div>
+
+      <div class="auth-view" data-view="loading" hidden>
+        <p class="auth-lead">正在识别所属企业…</p>
+        <div class="auth-loading"><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="auth-view" data-view="found" hidden>
+        <p class="auth-eyebrow">已 识 别</p>
+        <p class="auth-big">明德银行 · 员工</p>
+        <p class="auth-lead">可用额度 ¥900 · 礼品券 2 张 · 积分 8,600</p>
+        <button class="btn btn--solid" style="width:100%;margin-top:24px" data-auth="start">开始使用</button>
+      </div>
+
+      <div class="auth-view" data-view="apply" hidden>
+        <p class="auth-eyebrow">采 购 权 限</p>
+        <p class="auth-big">明德银行 · 采购</p>
+        <p class="auth-lead">采购身份可查看协议价、创建报价单。提交后由企业管理员审批，通常 1 个工作日内完成。</p>
+        <button class="btn btn--solid" style="width:100%;margin-top:24px" data-auth="submit">提交申请</button>
+        <p class="auth-foot">审批期间仍以员工身份使用。</p>
+      </div>
+    </div>
+
+    <div class="mask" id="buyMask"></div>
+
+    <div class="sheet" id="buySheet">
+      <button class="buy-close" id="buyClose" aria-label="关闭">×</button>
+      <div class="buy-head">
+        <div class="buy-thumb"><svg><use href="#p-cup"></use></svg></div>
+        <div>
+          <p class="buy-name" id="buyName">商品</p>
+          <p class="buy-price" id="buyPrice">¥128</p>
+        </div>
+      </div>
+
+      <div class="buy-row">
+        <span class="buy-k">数量</span>
+        <div class="stepper">
+          <button class="step" data-step="-1" aria-label="减少">−</button>
+          <input class="step-val" id="buyQty" type="text" inputmode="numeric" value="1" />
+          <button class="step" data-step="1" aria-label="增加">+</button>
+        </div>
+      </div>
+
+      <div class="buy-total">
+        <span class="buy-k">合计</span>
+        <span class="buy-sum" id="buySum">¥128</span>
+      </div>
+
+      <button class="btn btn--solid" id="buyConfirm" style="width:100%;margin-top:16px">加入选品单</button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
