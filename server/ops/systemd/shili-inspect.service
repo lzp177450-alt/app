@@ -1,0 +1,7 @@
+[Unit]
+Description=Shili daily inspection
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /srv/apps/shili/app/server/ops/inspect.sh
+TimeoutStartSec=180

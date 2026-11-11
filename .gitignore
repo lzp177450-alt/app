@@ -1,3 +1,14 @@
 ﻿Thumbs.db
 .DS_Store
 *.log
+
+# 本地依赖与测试数据
+server/node_modules/
+server/data/
+server/uploads/
+*.db
+*.db-wal
+*.db-shm
+
+# 服务器密钥
+.env

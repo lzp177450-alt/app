@@ -1,0 +1,17 @@
+[Unit]
+Description=Shili app (prototype + API)
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/srv/apps/shili
+ExecStart=/usr/bin/docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml up -d --remove-orphans
+ExecStop=/usr/bin/docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml down
+ExecReload=/usr/bin/docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml restart api
+TimeoutStartSec=300
+
+[Install]
+WantedBy=multi-user.target

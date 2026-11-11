@@ -1,0 +1,54 @@
+name: shili
+
+services:
+  api:
+    build:
+      context: .
+    image: shili-api:local
+    restart: unless-stopped
+    env_file:
+      - /srv/apps/shili/.env
+    environment:
+      DB_PATH: /data/app.db
+      APP_VERSION: ${APP_VERSION:-dev}
+    volumes:
+      - /srv/apps/shili/shared/db:/data
+      - /srv/apps/shili/shared/uploads:/app/uploads
+    expose:
+      - "3000"
+    mem_limit: 300m
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /srv/apps/shili/app/server/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /srv/apps/shili/app/prototype:/srv/web:ro
+      - /srv/apps/shili/shared/uploads:/srv/uploads:ro
+      - /srv/apps/shili/shared/caddy:/data
+    depends_on:
+      - api
+    mem_limit: 100m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

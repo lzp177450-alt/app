@@ -1,0 +1,7 @@
+[Unit]
+Description=Shili SQLite backup
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /srv/apps/shili/app/server/ops/backup.sh
+TimeoutStartSec=300

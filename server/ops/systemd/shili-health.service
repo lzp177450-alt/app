@@ -1,0 +1,7 @@
+[Unit]
+Description=Shili health check
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /srv/apps/shili/app/server/ops/health.sh
+TimeoutStartSec=120

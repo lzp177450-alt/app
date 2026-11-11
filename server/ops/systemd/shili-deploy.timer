@@ -1,0 +1,10 @@
+[Unit]
+Description=Shili auto deploy every 3 minutes (disabled by default)
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=3min
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target
