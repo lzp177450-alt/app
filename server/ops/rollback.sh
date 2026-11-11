@@ -2,6 +2,11 @@
 # 回滚到指定提交（默认上一版）。
 set -euo pipefail
 
+# 回滚同样会重置当前脚本，先读进内存
+if [ "${SHILI_SELF:-}" != "1" ]; then
+  SHILI_SELF=1 exec bash -c "$(cat "$0")" shili-rollback "$@"
+fi
+
 APP_DIR=${APP_DIR:-/srv/apps/shili}
 REPO="$APP_DIR/app"
 OPS="$REPO/server/ops"

@@ -2,6 +2,11 @@
 # 发布：拉取 main、备份数据库、重建容器、等健康检查。
 set -euo pipefail
 
+# 发布过程中会 git reset 当前脚本，先把自身读进内存再执行
+if [ "${SHILI_SELF:-}" != "1" ]; then
+  SHILI_SELF=1 exec bash -c "$(cat "$0")" shili-deploy "$@"
+fi
+
 APP_DIR=${APP_DIR:-/srv/apps/shili}
 REPO="$APP_DIR/app"
 BRANCH=${BRANCH:-main}
