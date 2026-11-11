@@ -17,11 +17,11 @@ install -d -o "$SERVICE_USER" -g "$SERVICE_USER" \
 
 if [ ! -f "$APP_DIR/.env" ]; then
   JWT=$(head -c 32 /dev/urandom | base64 | tr -d '=+/' | cut -c1-40)
-  OPS=$(head -c 24 /dev/urandom | base64 | tr -d '=+/' | cut -c1-28)
+  OPS_VALUE=$(head -c 24 /dev/urandom | base64 | tr -d '=+/' | cut -c1-28)
   cat > "$APP_DIR/.env" <<EOF
 PORT=3000
 JWT_SECRET=$JWT
-OPS_TOKEN=$OPS
+OPS_TOKEN=$OPS_VALUE
 WX_APPID=
 WX_SECRET=
 ALLOW_DEV_LOGIN=1
