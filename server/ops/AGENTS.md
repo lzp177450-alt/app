@@ -25,7 +25,21 @@ sudo shili-deploy                 # 拉 main 并重建，约 1–2 分钟
 sudo shili-rollback               # 回滚到上一版
 sudo shili-rollback <commit>      # 回滚到指定提交
 sudo shili-health                 # 体检，失败会尝试重启 api
+
+# 带运维口令调接口（不用手写 token）
+sudo shili-api GET /admin/stats
+sudo shili-api GET /admin/selections?status=pending
+sudo shili-api PATCH /admin/selections/<id> '{"status":"quoted"}'
 ```
+
+## 选品单流转
+
+状态只有四个：`pending`（待跟进）→ `quoted`（已报价）→ `deal`（已成交），任意阶段可 `closed`（已关闭）。
+
+- 用户说「这单已经报价了」→ 改成 `quoted`
+- 用户说「成交了」→ 改成 `deal`
+- 用户说「不做了」→ 改成 `closed`
+- 改之前先用 `GET /admin/selections` 找到对应编号，改完回报单号和新状态
 
 只读排查：
 
@@ -39,7 +53,7 @@ df -h / ; free -m
 
 ## 禁止
 
-- 不要读取、打印、修改 `/srv/apps/shili/.env`
+- 不要读取、打印、修改 `/srv/apps/shili/.env`（需要运维口令时用 `shili-api`，不要手工拼 token）
 - 不要 `rm -rf`、不要 `docker system prune`、不要 `docker run`
 - 不要手动改数据库结构；迁移写在代码里，随发布执行
 - 不要改 Caddyfile 的端口和 `/api` 反代规则

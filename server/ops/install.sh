@@ -36,7 +36,7 @@ chmod +x "$OPS"/*.sh
 
 cp "$OPS"/systemd/*.service "$OPS"/systemd/*.timer /etc/systemd/system/
 
-for name in deploy rollback health; do
+for name in deploy rollback health api; do
   cat > "/usr/local/bin/shili-$name" <<EOF
 #!/usr/bin/env bash
 exec bash $OPS/$name.sh "\$@"
@@ -46,7 +46,7 @@ done
 
 cat > /etc/sudoers.d/shili <<'EOF'
 Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-deploy ALL=(root) NOPASSWD: /usr/local/bin/shili-deploy, /usr/local/bin/shili-rollback, /usr/local/bin/shili-health
+deploy ALL=(root) NOPASSWD: /usr/local/bin/shili-deploy, /usr/local/bin/shili-rollback, /usr/local/bin/shili-health, /usr/local/bin/shili-api
 EOF
 chmod 440 /etc/sudoers.d/shili
 visudo -cf /etc/sudoers.d/shili >/dev/null
