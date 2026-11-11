@@ -45,6 +45,7 @@ EOF
 done
 
 cat > /etc/sudoers.d/shili <<'EOF'
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 deploy ALL=(root) NOPASSWD: /usr/local/bin/shili-deploy, /usr/local/bin/shili-rollback, /usr/local/bin/shili-health
 EOF
 chmod 440 /etc/sudoers.d/shili
