@@ -31,15 +31,16 @@ if ! git fetch --depth=1 origin "$BRANCH" >/dev/null 2>&1; then
   exit 1
 fi
 
-PREV=$(git rev-parse --short HEAD)
-REMOTE=$(git rev-parse "origin/$BRANCH")
+PREV_FULL=$(git rev-parse HEAD)
+REMOTE_FULL=$(git rev-parse "origin/$BRANCH")
+PREV=$(git rev-parse --short "$PREV_FULL")
 
-if [ "$PREV" = "$REMOTE" ] && [ "${FORCE:-0}" != "1" ]; then
+if [ "$PREV_FULL" = "$REMOTE_FULL" ] && [ "${FORCE:-0}" != "1" ]; then
   log "已是最新 $PREV，跳过"
   exit 0
 fi
 
-git reset --hard "$REMOTE" >/dev/null
+git reset --hard "$REMOTE_FULL" >/dev/null
 NEW=$(git rev-parse --short HEAD)
 log "代码 $PREV -> $NEW"
 
