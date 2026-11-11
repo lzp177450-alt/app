@@ -67,12 +67,16 @@ df -h / ; free -m
 ## 数据库恢复
 
 ```bash
-docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml stop api
-cp /srv/apps/shili/shared/db/backups/app-<时间>.db /srv/apps/shili/shared/db/app.db
-docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml start api
+COMPOSE="docker compose -p shili -f /srv/apps/shili/app/server/docker-compose.yml"
+sudo $COMPOSE stop api
+sudo cp /srv/apps/shili/shared/db/app.db /srv/apps/shili/shared/db/app.db.before-restore
+sudo cp /srv/apps/shili/shared/db/backups/app-<时间>.db /srv/apps/shili/shared/db/app.db
+sudo $COMPOSE start api
 ```
 
-恢复前先把当前 `app.db` 改名留底，别直接覆盖。
+恢复前先把当前 `app.db` 改名留底，别直接覆盖。备份文件属于 root，操作要带 `sudo`。
+
+手动备份：`sudo systemctl start shili-backup.service`，文件落在 `/srv/apps/shili/shared/db/backups`。
 
 ## 发布规则
 

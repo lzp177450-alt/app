@@ -57,6 +57,7 @@ fi
 for _ in $(seq 1 45); do
   if curl -fsS -m 3 http://127.0.0.1/api/health >/dev/null 2>&1; then
     log "部署完成 $NEW"
+    install -m 644 -o deploy -g deploy "$OPS/AGENTS.md" /srv/workspaces/shili/AGENTS.md 2>/dev/null || true
     notify "**拾礼 · 部署成功**
 版本：\`$NEW\`
 上一版：\`$PREV\`
